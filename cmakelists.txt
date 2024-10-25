@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.10)
+
+project(vro)
+
+if(MSVC)
+  add_compile_options(/W4 /WX)
+else()
+  add_compile_options(-Wall -Wextra -Wpedantic -Werror)
+endif()
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+file(GLOB_RECURSE VRO_SOURCES "src/*.ixx")
+
+add_executable(vro ${VRO_SOURCES})
+target_include_directories(vro PUBLIC "$ENV{VULKAN_SDK}/Include")
+target_link_libraries(vro "$ENV{VULKAN_SDK}/Lib/vulkan-1.lib")

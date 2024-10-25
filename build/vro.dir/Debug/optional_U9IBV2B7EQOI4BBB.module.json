@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "vro.dir\\Debug\\optional_U9IBV2B7EQOI4BBB.obj",
+            "outputs": [
+                "C:\\dev\\vro\\build\\vro.dir\\Debug\\vc143.pdb",
+                "vro.dir\\Debug\\optional_U9IBV2B7EQOI4BBB.module.json",
+                "vro.dir\\Debug\\optional_U9IBV2B7EQOI4BBB.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.40.33807\\include\\optional",
+                    "source-path": "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.40.33807\\include\\optional",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}
