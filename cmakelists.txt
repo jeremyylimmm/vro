@@ -15,8 +15,10 @@ file(GLOB_RECURSE CORE_SOURCES "src/engine/*.ixx")
 
 if (WIN32)
   file(GLOB_RECURSE PLATFORM_SOURCES "src/platform/win32/*.ixx")
+  set(VULKAN_SDK_PATH $ENV{VULKAN_SDK})
 elseif (APPLE)
   file(GLOB_RECURSE PLATFORM_SOURCES "src/platform/macos/*.ixx")
+  set(VULKAN_SDK_PATH $ENV{HOME}/VulkanSDK/1.3.296.0/macos)
 endif()
 
 file(GLOB_RECURSE SHADERS "src/*.vert" "src/*.frag")
@@ -30,7 +32,7 @@ foreach(SHADER ${SHADERS})
 
   add_custom_command(
     OUTPUT ${SPIRV_OUTPUT}
-    COMMAND $ENV{VULKAN_SDK}/Bin/glslc ${SHADER} -o ${SPIRV_OUTPUT}
+    COMMAND ${VULKAN_SDK_PATH}/Bin/glslc ${SHADER} -o ${SPIRV_OUTPUT}
     DEPENDS ${SHADER}
     COMMENT "Compiling shader: ${SHADER}"
     VERBATIM
@@ -43,6 +45,6 @@ add_custom_target(compile_shaders ALL DEPENDS ${SPIRV_SHADERS})
 
 add_executable(vro ${CORE_SOURCES} ${PLATFORM_SOURCES})
 add_dependencies(vro compile_shaders)
-set_property(TARGET vro PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}")
-target_include_directories(vro PUBLIC "$ENV{VULKAN_SDK}/Include")
-target_link_libraries(vro "$ENV{VULKAN_SDK}/Lib/vulkan-1.lib")
+set_property(TARGET vro PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(vro PUBLIC ${VULKAN_SDK_PATH}/Include)
+target_link_libraries(vro ${VULKAN_SDK_PATH}/Lib/vulkan-1.lib)
