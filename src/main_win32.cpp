@@ -2,7 +2,10 @@
 
 import <iostream>;
 import <optional>;
+import <vector>;
+
 import renderer;
+import platform;
 
 struct Events {
   bool closed;
