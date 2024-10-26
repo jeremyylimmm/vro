@@ -1,11 +1,10 @@
 #include <windows.h>
 
-import <iostream>;
-import <optional>;
-import <vector>;
+#include <iostream>
+#include <optional>
+#include <vector>
 
-import renderer;
-import platform;
+#include "engine/renderer.h"
 
 struct Events { // Reset every time events are polled
   bool closed;

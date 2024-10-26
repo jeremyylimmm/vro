@@ -2,22 +2,22 @@ cmake_minimum_required(VERSION 3.10)
 
 project(vro)
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
 if(MSVC)
   add_compile_options(/W4 /WX)
 else()
   add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 endif()
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-file(GLOB_RECURSE CORE_SOURCES "src/engine/*.ixx")
+file(GLOB_RECURSE CORE_SOURCES "src/engine/*.cpp")
 
 if (WIN32)
-  file(GLOB_RECURSE PLATFORM_SOURCES "src/platform/win32/*.ixx")
+  file(GLOB_RECURSE PLATFORM_SOURCES "src/platform/win32/*.cpp")
   set(VULKAN_SDK_PATH $ENV{VULKAN_SDK})
 elseif (APPLE)
-  file(GLOB_RECURSE PLATFORM_SOURCES "src/platform/macos/*.ixx")
+  file(GLOB_RECURSE PLATFORM_SOURCES "src/platform/macos/*.cpp")
   set(VULKAN_SDK_PATH $ENV{HOME}/VulkanSDK/1.3.296.0/macos)
 endif()
 
@@ -46,5 +46,5 @@ add_custom_target(compile_shaders ALL DEPENDS ${SPIRV_SHADERS})
 add_executable(vro ${CORE_SOURCES} ${PLATFORM_SOURCES})
 add_dependencies(vro compile_shaders)
 set_property(TARGET vro PROPERTY VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
-target_include_directories(vro PUBLIC ${VULKAN_SDK_PATH}/Include)
+target_include_directories(vro PUBLIC ${VULKAN_SDK_PATH}/Include ${CMAKE_CURRENT_LIST_DIR}/src)
 target_link_libraries(vro ${VULKAN_SDK_PATH}/Lib/vulkan-1.lib)
