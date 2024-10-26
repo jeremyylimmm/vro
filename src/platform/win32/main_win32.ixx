@@ -7,11 +7,12 @@ import <vector>;
 import renderer;
 import platform;
 
-struct Events {
+struct Events { // Reset every time events are polled
   bool closed;
   std::optional<std::pair<uint32_t, uint32_t>> resize;
 };
 
+// Window event callback
 static LRESULT CALLBACK window_proc(HWND window, UINT msg, WPARAM w_param, LPARAM l_param) {
   LRESULT result = 0;
 
@@ -33,6 +34,7 @@ static LRESULT CALLBACK window_proc(HWND window, UINT msg, WPARAM w_param, LPARA
 }
 
 int main() {
+  // Register the window class
   WNDCLASSA wc = {
     .lpfnWndProc = window_proc,
     .hInstance = GetModuleHandleA(nullptr),
@@ -41,29 +43,31 @@ int main() {
 
   RegisterClassA(&wc);
 
-  HWND window = CreateWindowA(wc.lpszClassName, "Vro", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, nullptr, nullptr, wc.hInstance, nullptr);
-
+  // Create window
   Events e = {};
+  HWND window = CreateWindowA(wc.lpszClassName, "Vro", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, nullptr, nullptr, wc.hInstance, nullptr);
+  
+  // Set events pointer
   SetWindowLongPtrA(window, GWLP_USERDATA, (LONG_PTR)&e);
-
   ShowWindow(window, SW_MAXIMIZE);
 
+  // Create the renderer
   Renderer r(window);
 
+  // Loop while open
   while (true) {
-    e = {};
-
+    e = {}; // Reset events and poll
     MSG msg;
     while (PeekMessageA(&msg, window, 0, 0, PM_REMOVE)) {
       TranslateMessage(&msg);
       DispatchMessageA(&msg);
     }
 
-    if (e.closed) {
+    if (e.closed) { // Check if window is closed
       break;
     }
 
-    if (e.resize) {
+    if (e.resize) { // Handle resize callback -> resize renderer resources
       auto [w, h] = *e.resize;
 
       if (w == 0 || h == 0) {
@@ -73,6 +77,7 @@ int main() {
       r.resize(w, h);
     }
 
+    // Call renderer
     r.present();
   }
 

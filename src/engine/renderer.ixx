@@ -74,25 +74,21 @@ public:
       "VK_EXT_debug_utils",
 #endif
 #ifdef __APPLE__
-      "VK_KHR_portability_enumeration",
 #endif
     };
 
-    auto platform_extensions = platform::get_platform_instance_extensions();
+    auto platform_extensions = platform::get_vulkan_instance_extensions();
     extensions.insert(extensions.end(), platform_extensions.begin(), platform_extensions.end());
 
     VkInstanceCreateInfo instance_info = {
       .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+      .flags = platform::get_vulkan_instance_flags(),
       .pApplicationInfo = &app_info,
       .enabledLayerCount = (uint32_t)validation_layers.size(),
       .ppEnabledLayerNames = validation_layers.data(),
       .enabledExtensionCount = (uint32_t)extensions.size(),
-      .ppEnabledExtensionNames = extensions.data()
+      .ppEnabledExtensionNames = extensions.data(),
     };
-
-#ifdef __APPLE__
-    instance_info.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
-#endif
 
     if (vkCreateInstance(&instance_info, nullptr, &m_instance) != VK_SUCCESS) {
       fatal_error("Failed to create Vulkan instance.");

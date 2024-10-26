@@ -30,7 +30,6 @@ export namespace platform {
     MessageBoxA(nullptr, message, title, 0);
   }
 
-
   VkSurfaceKHR create_vulkan_surface(VkInstance instance, platform::WindowHandle window) {
     HWND hwnd = (HWND)window;
   
@@ -48,10 +47,14 @@ export namespace platform {
     return surface;
   }
   
-  std::vector<const char*> get_platform_instance_extensions() {
+  std::vector<const char*> get_vulkan_instance_extensions() {
     return {
       "VK_KHR_win32_surface",
     };
+  }
+
+  VkInstanceCreateFlags get_vulkan_instance_flags() {
+    return (VkInstanceCreateFlags)0;
   }
 
 };
